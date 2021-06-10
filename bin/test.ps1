@@ -2,8 +2,9 @@
 
 $__DIR__ = $(Split-Path -Parent $MyInvocation.MyCommand.Definition)
 
-echo $__DIR__
+& $__DIR__\test2.ps1
+# echo $__DIR__
 
-php -v
+# php -v
 
-Start-Process powershell "php $__DIR__/../test.php > $__DIR__/../cli.log"
+# Start-Process powershell "php $__DIR__/../test.php > $__DIR__/../cli.log"
