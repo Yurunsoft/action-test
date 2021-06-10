@@ -23,5 +23,5 @@ jobs:
           php -m
           composer -V
           bin\test.ps1
-          php -r "sleep(3);"
+          php -r "sleep(5);"
           php -r "echo file_get_contents('cli.log');"
