@@ -6,4 +6,4 @@ echo $__DIR__
 
 php -v
 
-Start-Process php $__DIR__/../test.php > $__DIR__/../cli.log
+Start-Process powershell "php $__DIR__/../test.php > $__DIR__/../cli.log"
