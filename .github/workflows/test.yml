@@ -5,6 +5,17 @@ on: [push, pull_request]
 jobs:
   windows:
     runs-on: windows-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306
+      redis:
+        image: redis:6
+        ports:
+          - 6379
 
     steps:
       - uses: actions/checkout@v2
@@ -16,7 +27,7 @@ jobs:
           ini-values: session.save_path=C:\temp
           tools: pecl
           extensions: bcmath, curl, openssl, mbstring, intl, json, igbinary, redis, mysqli, pdo, pdo_mysql
-
+      
       - name: Test
         run: |
           php -v

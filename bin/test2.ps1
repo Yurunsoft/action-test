@@ -1,1 +1,4 @@
-echo test2
+
+$__DIR__ = $(Split-Path -Parent $MyInvocation.MyCommand.Definition)
+
+php $__DIR__\test.php
