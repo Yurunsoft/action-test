@@ -9,6 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: prepare
+        run: |
+          ((Get-Content -path $installDir\php.ini -Raw) -replace ';extension=pcntl','extension=pcntl' -replace ';extension=mysqli','extension=mysqli' -replace ';extension=redis','extension=redis') | Set-Content -Path $installDir\php.ini
+
       - name: test
         run: |
           php -v
