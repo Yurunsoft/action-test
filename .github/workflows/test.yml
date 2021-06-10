@@ -29,6 +29,6 @@ jobs:
           php -v
           php -m
           composer -V
-          php test2.php
-          php -r "sleep(5);"
-          php -r "echo file_get_contents('cli.log');"
+          php test.php
+#          php -r "sleep(5);"
+#          php -r "echo file_get_contents('cli.log');"
