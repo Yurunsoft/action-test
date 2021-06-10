@@ -5,20 +5,25 @@ on: [push, pull_request]
 jobs:
   windows:
     runs-on: windows-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306
-      redis:
-        image: redis:6
-        ports:
-          - 6379
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Setup Redis Server
+        run: |
+          nuget install redis-64 -excludeversion
+          redis-64\tools\redis-server.exe --service-install
+          redis-64\tools\redis-server.exe --service-start
+          '@ECHO Redis Started'
+
+      - name: Setup MySQL
+        run: |
+          mkdir C:\mysql
+          CD /D C:\mysql
+          curl -fsS --retry 3 --retry-connrefused -o mysql.msi https://cdn.mysql.com/archives/mysql-installer/mysql-installer-community-8.0.15.0.msi
+          msiexec /q /log install.txt /i mysql.msi datadir=C:\mysql installdir=C:\mysql
+          call "C:\Program Files (x86)\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe" community install server;8.0.15;x64:*:port=3306;rootpasswd=root;servicename=MySQL -silent
+          netsh advfirewall firewall add rule name="Allow mysql" dir=in action=allow edge=yes remoteip=any protocol=TCP localport=3306
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
