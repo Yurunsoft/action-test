@@ -13,12 +13,15 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
-          ini-values: apc.enable_cli=on, session.save_path=C:\temp
+          ini-values: session.save_path=C:\temp
           tools: pecl
-          extensions: mbstring, intl, json, yaml, apcu, imagick, gd, gettext, igbinary, sqlite3, msgpack, psr, redis, mysqli, pdo, pdo_mysql
+          extensions: bcmath, curl, openssl, mbstring, intl, json, igbinary, redis, mysqli, pdo, pdo_mysql
 
       - name: Test
         run: |
           php -v
           php -m
           composer -V
+          bin\test.ps1
+          php -r "sleep(3);"
+          php -r "echo file_get_contents('cli.log');"
