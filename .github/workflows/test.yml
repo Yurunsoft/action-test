@@ -16,6 +16,12 @@ jobs:
           redis-64\tools\redis-server.exe --service-start
           '@ECHO Redis Started'
 
+      - name: Setup Mysql
+        uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: '8.0'
+          root-password: root
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
