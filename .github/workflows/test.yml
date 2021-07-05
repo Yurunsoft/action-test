@@ -4,37 +4,21 @@ on: [push, pull_request]
 
 jobs:
   windows:
-    runs-on: windows-latest
+    runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Redis Server
-        run: |
-          nuget install redis-64 -excludeversion
-          redis-64\tools\redis-server.exe --service-install
-          redis-64\tools\redis-server.exe --service-start
-          '@ECHO Redis Started'
-
-      - name: Setup Mysql
-        uses: shogo82148/actions-setup-mysql@v1
+      - name: Start SSH via ngrok
+        uses: P3TERX/ssh2actions@main
         with:
-          mysql-version: '8.0'
-          root-password: root
+          mode: ngrok
+        env:
+          # After sign up on the https://ngrok.com
+          # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+          
+          # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
+          # You can find this server region here: https://ngrok.com/docs#global-locations
+          NGROK_REGION: jp
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-          ini-values: session.save_path=C:\temp
-          tools: pecl
-          extensions: bcmath, curl, openssl, mbstring, intl, json, igbinary, redis, mysqli, pdo, pdo_mysql
-      
-      - name: Test
-        run: |
-          php -v
-          php -m
-          composer -V
-          php test.php
-#          php -r "sleep(5);"
-#          php -r "echo file_get_contents('cli.log');"
+          # This password you will use when authorizing via SSH
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
