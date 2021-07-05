@@ -18,7 +18,7 @@ jobs:
           
           # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
           # You can find this server region here: https://ngrok.com/docs#global-locations
-          NGROK_REGION: jp
+          NGROK_REGION: us
 
           # This password you will use when authorizing via SSH
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
