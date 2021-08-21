@@ -22,7 +22,7 @@ return [
     'components'    =>  [],
 
     // 主服务器配置
-    'mainServer'    => 'Swoole' === $mode ? [
+    'mainServer'    => 'swoole' === $mode ? [
         'namespace' =>  'ImiApp\ApiServer',
         'type'      =>  Imi\Swoole\Server\Type::HTTP,
         'host'      =>  '0.0.0.0',
@@ -40,7 +40,7 @@ return [
     ] : [],
 
     // Workerman 服务器配置
-    'workermanServer' => 'Workerman' === $mode ? [
+    'workermanServer' => 'workerman' === $mode ? [
         // 服务器名，http 也可以改成 abc 等等，完全自定义
         'http' => [
             // 指定服务器命名空间
@@ -90,7 +90,7 @@ return [
         ],
     ],
 
-    'pools' => 'Swoole' === $mode ? [
+    'pools' => 'swoole' === $mode ? [
         // 连接池名称
         'db' => [
             'pool'    =>    [
