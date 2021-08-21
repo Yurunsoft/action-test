@@ -2,9 +2,6 @@ FROM php:8.0-cli
 
 RUN docker-php-ext-install opcache mysqli pcntl sockets > /dev/null
 
-RUN pecl install swoole > /dev/null && \
-    docker-php-ext-enable swoole
-
 RUN pecl install redis > /dev/null && \
     docker-php-ext-enable redis
 
