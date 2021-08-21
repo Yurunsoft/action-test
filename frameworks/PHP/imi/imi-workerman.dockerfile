@@ -3,10 +3,10 @@ FROM php:8.0-cli
 RUN docker-php-ext-install opcache mysqli pcntl sockets > /dev/null
 
 RUN apt -yqq update > /dev/null && \
-    apt -yqq install git unzip libevent-dev redis-server > /dev/null
+    apt -yqq install git unzip libevent-dev libssl-dev redis-server > /dev/null
 
-RUN pecl install event-3.0.5 > /dev/null \
-    && echo "extension=event.so" > /usr/local/etc/php/conf.d/event.ini
+RUN pecl install event-3.0.5 > /dev/null && \
+    docker-php-ext-enable event
 
 RUN pecl install redis > /dev/null && \
     docker-php-ext-enable redis
