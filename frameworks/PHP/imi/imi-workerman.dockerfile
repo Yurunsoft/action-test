@@ -5,7 +5,7 @@ RUN docker-php-ext-install opcache mysqli pcntl sockets > /dev/null
 RUN pecl install redis > /dev/null && \
     docker-php-ext-enable redis
 
-RUN pecl install event-3.0.5 > /dev/null && \
+RUN pecl install event-3.0.5 && \
     docker-php-ext-enable event
 
 RUN apt -yqq update > /dev/null && \

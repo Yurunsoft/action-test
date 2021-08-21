@@ -1,7 +1,7 @@
 [framework]
 name = "imi"
 
-[swoole]
+[main]
 dockerfile = "imi-swoole.dockerfile"
 urls.plaintext = "/plaintext"
 urls.json = "/json"

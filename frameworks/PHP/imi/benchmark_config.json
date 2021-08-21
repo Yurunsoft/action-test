@@ -2,7 +2,7 @@
   "framework": "imi",
   "tests": [
     {
-      "swoole": {
+      "default": {
         "dockerfile": "imi-swoole.dockerfile",
         "json_url": "/json",
         "plaintext_url": "/plaintext",
