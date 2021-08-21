@@ -2,7 +2,7 @@
 
 use Imi\App;
 
-$mode = App::getApp()->getType();
+$mode = App::isInited() ? App::getApp()->getType() : '';
 
 return [
     // 项目根命名空间
