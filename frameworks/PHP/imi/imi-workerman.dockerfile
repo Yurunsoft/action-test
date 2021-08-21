@@ -1,9 +1,15 @@
 FROM php:8.0-cli
 
-RUN docker-php-ext-install bcmath pdo_mysql opcache pcntl > /dev/null
+RUN docker-php-ext-install bcmath mysqli opcache pcntl sockets > /dev/null
 
-RUN pecl install event redis > /dev/null && \
-    docker-php-ext-enable event redis
+RUN pecl install swoole > /dev/null && \
+    docker-php-ext-enable swoole
+
+RUN pecl install redis > /dev/null && \
+    docker-php-ext-enable redis
+
+RUN pecl install event > /dev/null && \
+    docker-php-ext-enable event
 
 RUN apt -yqq update > /dev/null && \
     apt -yqq install git unzip > /dev/null

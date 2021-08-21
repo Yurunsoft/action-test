@@ -66,6 +66,7 @@ return [
                 'username'    => 'benchmarkdbuser',
                 'password'    => 'benchmarkdbpass',
                 'database'    => 'hello_world',
+                'dbClass'     => \Imi\Db\Mysql\Drivers\Mysqli\Driver::class,
             ],
         ],
     ],
