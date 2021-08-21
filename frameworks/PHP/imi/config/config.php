@@ -40,7 +40,7 @@ return [
     ] : [],
 
     // Workerman 服务器配置
-    'workermanServer' => [
+    'workermanServer' => 'Workerman' === $mode ? [
         // 服务器名，http 也可以改成 abc 等等，完全自定义
         'http' => [
             // 指定服务器命名空间
@@ -56,7 +56,7 @@ return [
                 'count' => shell_exec('nproc') ?: 32,
             ],
         ],
-    ],
+    ] : [],
 
     'db'    => [
         'defaultPool'   => 'db', // 默认连接池
