@@ -2,14 +2,14 @@ FROM php:8.0-cli
 
 RUN docker-php-ext-install opcache > /dev/null
 
+RUN apt -yqq update > /dev/null && \
+    apt -yqq install git unzip redis-server > /dev/null
+
 RUN pecl install swoole > /dev/null && \
     docker-php-ext-enable swoole
 
 RUN pecl install redis > /dev/null && \
     docker-php-ext-enable redis
-
-RUN apt -yqq update > /dev/null && \
-    apt -yqq install git unzip redis-server > /dev/null
 
 COPY . /imi
 COPY php.ini /usr/local/etc/php/
