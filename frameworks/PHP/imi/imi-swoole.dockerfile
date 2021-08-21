@@ -1,6 +1,6 @@
 FROM php:8.0-cli
 
-RUN docker-php-ext-install bcmath mysqli opcache > /dev/null
+RUN docker-php-ext-install opcache > /dev/null
 
 RUN pecl install swoole > /dev/null && \
     docker-php-ext-enable swoole

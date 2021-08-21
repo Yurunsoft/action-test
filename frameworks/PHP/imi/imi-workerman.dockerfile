@@ -1,6 +1,6 @@
 FROM php:8.0-cli
 
-RUN docker-php-ext-install bcmath mysqli opcache pcntl sockets > /dev/null
+RUN docker-php-ext-install opcache mysqli pcntl sockets > /dev/null
 
 RUN pecl install swoole > /dev/null && \
     docker-php-ext-enable swoole
@@ -8,7 +8,7 @@ RUN pecl install swoole > /dev/null && \
 RUN pecl install redis > /dev/null && \
     docker-php-ext-enable redis
 
-RUN pecl install event > /dev/null && \
+RUN pecl install event-3.0.5 > /dev/null && \
     docker-php-ext-enable event
 
 RUN apt -yqq update > /dev/null && \
