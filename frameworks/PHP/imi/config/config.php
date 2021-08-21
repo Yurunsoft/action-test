@@ -1,11 +1,9 @@
 <?php
-$dbResourceConfig = [
-    'host'        => 'tfb-database',
-    'username'    => 'benchmarkdbuser',
-    'password'    => 'benchmarkdbpass',
-    'database'    => 'hello_world',
-    'dbClass'     => \Imi\Db\Drivers\Swoole\Driver::class,
-];
+
+use Imi\App;
+
+$mode = App::getApp()->getType();
+
 return [
     // 项目根命名空间
     'namespace'    =>    'ImiApp',
@@ -24,9 +22,9 @@ return [
     'components'    =>  [],
 
     // 主服务器配置
-    'mainServer'    =>    [
+    'mainServer'    => 'Swoole' === $mode ? [
         'namespace' =>  'ImiApp\ApiServer',
-        'type'      =>  Imi\Server\Type::HTTP,
+        'type'      =>  Imi\Swoole\Server\Type::HTTP,
         'host'      =>  '0.0.0.0',
         'port'      =>  8080,
         'mode'      =>  SWOOLE_BASE,
@@ -39,46 +37,92 @@ return [
             'http_parse_files'  => false,
             'http_compression'  => false,
         ],
+    ] : [],
+
+    // Workerman 服务器配置
+    'workermanServer' => [
+        // 服务器名，http 也可以改成 abc 等等，完全自定义
+        'http' => [
+            // 指定服务器命名空间
+            'namespace' => 'ImiApp\ApiServer',
+            // 服务器类型
+            'type'      => Imi\Workerman\Server\Type::HTTP, // HTTP、WEBSOCKET、TCP、UDP
+            'host'      => '0.0.0.0',
+            'port'      => 8080,
+            // socket的上下文选项，参考：http://doc3.workerman.net/315128
+            'context'   => [],
+            'configs'   => [
+                // 支持设置 Workerman 参数
+                'count' => shell_exec('nproc') ?: 32,
+            ],
+        ],
     ],
 
     'db'    => [
         'defaultPool'   => 'db', // 默认连接池
+        'connections'   => [
+            'db' => [
+                'host'        => 'tfb-database',
+                'username'    => 'benchmarkdbuser',
+                'password'    => 'benchmarkdbpass',
+                'database'    => 'hello_world',
+            ],
+        ],
     ],
-    'redis'    =>    [
-        'defaultPool'               =>    'redis', // 默认连接池
+
+    // redis 配置
+    'redis' => [
+        // 默认连接池名
+        'defaultPool'   => 'redis',
         'quickFromRequestContext'   =>    true, // 从当前上下文中获取公用连接
+        'connections'   => [
+            'redis' => [
+                'host'      =>  '127.0.0.1',
+                'port'      =>  6379,
+                // 是否自动序列化变量
+                'serialize' =>  true,
+                // 密码
+                'password'  =>  null,
+                // 第几个库
+                'db'        =>  0,
+            ],
+        ],
     ],
-    'pools' => [
+
+    'pools' => 'Swoole' === $mode ? [
         // 连接池名称
         'db' => [
-            // 异步池子，worker进程使用
-            'async' => [
-                'pool'    =>    [
-                    'class'        =>    \Imi\Db\Pool\CoroutineDbPool::class,
-                    'config'    =>    [
-                        // 池子中最多资源数
-                        'maxResources' => 512,
-                        // 池子中最少资源数
-                        'minResources' => 16,
-                        'gcInterval'   => null,
-                        'checkStateWhenGetResource' =>  false,
-                        'requestResourceCheckInterval' => 30,
-                    ],
+            'pool'    =>    [
+                'class'        =>    \Imi\Swoole\Db\Pool\CoroutineDbPool::class,
+                'config'    =>    [
+                    // 池子中最多资源数
+                    'maxResources' => 512,
+                    // 池子中最少资源数
+                    'minResources' => 16,
+                    'gcInterval'   => 3600,
+                    'checkStateWhenGetResource' =>  false,
+                    'requestResourceCheckInterval' => 30,
                 ],
-                // resource也可以定义多个连接
-                'resource'    =>    $dbResourceConfig,
+            ],
+            // resource也可以定义多个连接
+            'resource'    =>    [
+                'host'        => 'tfb-database',
+                'username'    => 'benchmarkdbuser',
+                'password'    => 'benchmarkdbpass',
+                'database'    => 'hello_world',
+                'dbClass'     => \Imi\Swoole\Db\Driver\Swoole\Driver::class,
             ],
         ],
         'redis' =>  [
             'pool' => [
                 // 协程池类名
-                'asyncClass'    =>    \Imi\Redis\CoroutineRedisPool::class,
+                'class'    => \Imi\Swoole\Redis\Pool\CoroutineRedisPool::class,
                 'config' => [
                     // 池子中最多资源数
                     'maxResources' => 512,
                     // 池子中最少资源数
-                    'minResources' => 0,
-                    'gcInterval'   => null,
+                    'minResources' => getenv('WITH_REDIS') ? 16 : 0,
+                    'gcInterval'   => 3600,
                     'checkStateWhenGetResource' =>  false,
                     'requestResourceCheckInterval' => 30,
                 ],
@@ -95,5 +139,5 @@ return [
                 'db'        =>  0,
             ],
         ],
-    ],
+    ] : [],
 ];

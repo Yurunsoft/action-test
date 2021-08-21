@@ -17,7 +17,7 @@ class AppInit implements IEventListener
      * @param EventParam $e
      * @return void
      */
-    public function handle(EventParam $e)
+    public function handle(EventParam $e): void
     {
         if(getenv('WITH_REDIS') ?? false)
         {

@@ -1,7 +1,8 @@
 [framework]
 name = "imi"
 
-[main]
+[swoole]
+dockerfile = "imi-swoole.dockerfile"
 urls.plaintext = "/plaintext"
 urls.json = "/json"
 urls.db = "/dbModel"
@@ -19,7 +20,8 @@ platform = "Swoole"
 webserver = "None"
 versus = "Swoole"
 
-[raw]
+[swoole-db-raw]
+dockerfile = "imi-swoole.dockerfile"
 urls.db = "/dbRaw"
 urls.query = "/queryRaw?queries="
 urls.update = "/updateRaw?queries="
@@ -34,16 +36,39 @@ platform = "Swoole"
 webserver = "None"
 versus = "Swoole"
 
-[query-builder]
-urls.db = "/dbQueryBuilder"
-urls.query = "/queryQueryBuilder?queries="
-urls.update = "/updateQueryBuilder?queries="
+
+[workerman]
+dockerfile = "imi-workerman.dockerfile"
+urls.plaintext = "/plaintext"
+urls.json = "/json"
+urls.db = "/dbModel"
+urls.query = "/queryModel?queries="
+urls.update = "/updateModel?queries="
+urls.fortune = "/fortunes"
+urls.cached_query = "/cached-worlds?count="
 approach = "Realistic"
 classification = "Fullstack"
 database = "MySQL"
 database_os = "Linux"
 os = "Linux"
-orm = "Micro"
-platform = "Swoole"
+orm = "Full"
+platform = "Workerman"
 webserver = "None"
-versus = "Swoole"
+versus = "Workerman"
+
+[workerman-db-raw]
+dockerfile = "imi-workerman.dockerfile"
+urls.db = "/dbRaw"
+urls.query = "/queryRaw?queries="
+urls.update = "/updateRaw?queries="
+urls.fortune = "/fortunesRaw"
+approach = "Realistic"
+classification = "Micro"
+database = "MySQL"
+database_os = "Linux"
+os = "Linux"
+orm = "Raw"
+platform = "Workerman"
+webserver = "None"
+versus = "Workerman"
+
