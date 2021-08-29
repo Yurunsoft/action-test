@@ -59,14 +59,21 @@ return [
     ] : [],
 
     'db'    => [
-        'defaultPool'   => 'db', // 默认连接池
+        'defaultPool'   => 'mysql', // 默认连接池
         'connections'   => [
-            'db' => [
+            'mysql' => [
                 'host'        => 'tfb-database',
                 'username'    => 'benchmarkdbuser',
                 'password'    => 'benchmarkdbpass',
                 'database'    => 'hello_world',
                 'dbClass'     => \Imi\Db\Mysql\Drivers\Mysqli\Driver::class,
+            ],
+            'pgsql' => [
+                'host'        => 'tfb-database',
+                'username'    => 'benchmarkdbuser',
+                'password'    => 'benchmarkdbpass',
+                'database'    => 'hello_world',
+                'dbClass'     => \Imi\Pgsql\Db\Drivers\PdoPgsql\Driver::class,
             ],
         ],
     ],
@@ -92,17 +99,17 @@ return [
 
     'pools' => 'swoole' === $mode ? [
         // 连接池名称
-        'db' => [
+        'mysql' => [
             'pool'    =>    [
                 'class'        =>    \Imi\Swoole\Db\Pool\CoroutineDbPool::class,
                 'config'    =>    [
                     // 池子中最多资源数
                     'maxResources' => 512,
                     // 池子中最少资源数
-                    'minResources' => 16,
+                    'minResources' => class_exists(Imi\Pgsql\Main::class) ? 0 : 16,
                     'gcInterval'   => 3600,
                     'checkStateWhenGetResource' =>  false,
-                    'requestResourceCheckInterval' => 30,
+                    'requestResourceCheckInterval' => 0,
                 ],
             ],
             // resource也可以定义多个连接
@@ -112,6 +119,28 @@ return [
                 'password'    => 'benchmarkdbpass',
                 'database'    => 'hello_world',
                 'dbClass'     => \Imi\Swoole\Db\Driver\Swoole\Driver::class,
+            ],
+        ],
+        'pgsql' => [
+            'pool'    =>    [
+                'class'        =>    \Imi\Swoole\Db\Pool\CoroutineDbPool::class,
+                'config'    =>    [
+                    // 池子中最多资源数
+                    'maxResources' => 512,
+                    // 池子中最少资源数
+                    'minResources' => class_exists(Imi\Pgsql\Main::class) ? 16 : 0,
+                    'gcInterval'   => 3600,
+                    'checkStateWhenGetResource' =>  false,
+                    'requestResourceCheckInterval' => 0,
+                ],
+            ],
+            // resource也可以定义多个连接
+            'resource'    =>    [
+                'host'        => 'tfb-database',
+                'username'    => 'benchmarkdbuser',
+                'password'    => 'benchmarkdbpass',
+                'database'    => 'hello_world',
+                'dbClass'     => \Imi\Pgsql\Db\Drivers\Swoole\Driver::class,
             ],
         ],
         'redis' =>  [
