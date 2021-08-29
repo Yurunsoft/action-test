@@ -19,11 +19,11 @@ class AppInit implements IEventListener
      */
     public function handle(EventParam $e): void
     {
-        if(!class_exists(\Imi\Pgsql\Main::class))
+        if(getenv('WITH_REDIS'))
         {
             $redis = RedisManager::getInstance();
             $page = 1;
-            while($list = Db::query()->from('world')->page($page, 1000)->select()->getArray())
+            while($list = Db::query('MySQL' === (getenv('TFB_TEST_DATABASE') ?: 'MySQL') ? 'mysql' : 'pgsql')->from('world')->page($page, 1000)->select()->getArray())
             {
                 $redisList = [];
                 foreach($list as $row)

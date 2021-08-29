@@ -126,9 +126,9 @@ return [
                 'class'        =>    \Imi\Swoole\Db\Pool\CoroutineDbPool::class,
                 'config'    =>    [
                     // 池子中最多资源数
-                    'maxResources' => 512,
+                    'maxResources' => intval(512 / swoole_cpu_num()),
                     // 池子中最少资源数
-                    'minResources' => class_exists(Imi\Pgsql\Main::class) ? 16 : 0,
+                    'minResources' => class_exists(Imi\Pgsql\Main::class) ? intval(512 / swoole_cpu_num()) : 0,
                     'gcInterval'   => 3600,
                     'checkStateWhenGetResource' =>  false,
                     'requestResourceCheckInterval' => 0,
