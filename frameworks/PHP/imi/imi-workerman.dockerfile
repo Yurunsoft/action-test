@@ -1,7 +1,7 @@
 FROM php:8.0-cli
 
 RUN apt -yqq update > /dev/null && \
-    apt -yqq install git unzip libevent-dev libssl-dev redis-server > /dev/null
+    apt -yqq install git unzip libevent-dev libssl-dev libpq-dev redis-server > /dev/null
 
 RUN docker-php-ext-install opcache mysqli pcntl sockets pdo_pgsql > /dev/null
 
