@@ -5,6 +5,8 @@ RUN docker-php-ext-install opcache > /dev/null
 RUN apt -yqq update > /dev/null && \
     apt -yqq install git unzip redis-server > /dev/null
 
+RUN pecl update-channels
+
 RUN pecl install swoole > /dev/null && \
     docker-php-ext-enable swoole
 

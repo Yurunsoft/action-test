@@ -19,7 +19,7 @@ class AppInit implements IEventListener
      */
     public function handle(EventParam $e): void
     {
-        if(getenv('WITH_REDIS') ?: false)
+        if(!class_exists(\Imi\Pgsql\Main::class))
         {
             $redis = RedisManager::getInstance();
             $page = 1;

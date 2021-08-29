@@ -18,6 +18,8 @@ RUN     cd /tmp && curl -sSL "https://github.com/swoole/ext-postgresql/archive/$
         && phpize && ./configure > /dev/null && make -j > /dev/null && make install > /dev/null \
         && docker-php-ext-enable swoole_postgresql
 
+RUN pecl update-channels
+
 RUN pecl install redis > /dev/null && \
     docker-php-ext-enable redis
 
