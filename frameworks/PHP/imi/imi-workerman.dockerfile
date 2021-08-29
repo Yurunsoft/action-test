@@ -1,9 +1,9 @@
 FROM php:8.0-cli
 
-RUN docker-php-ext-install opcache mysqli pcntl sockets pdo_pgsql > /dev/null
-
 RUN apt -yqq update > /dev/null && \
     apt -yqq install git unzip libevent-dev libssl-dev redis-server > /dev/null
+
+RUN docker-php-ext-install opcache mysqli pcntl sockets pdo_pgsql > /dev/null
 
 RUN pecl install event-3.0.5 > /dev/null && \
     docker-php-ext-enable event
