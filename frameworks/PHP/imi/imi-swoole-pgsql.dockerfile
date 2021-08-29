@@ -13,7 +13,7 @@ RUN     cd /tmp && curl -sSL "https://github.com/swoole/swoole-src/archive/v${SW
         && phpize && ./configure > /dev/null && make -j > /dev/null && make install > /dev/null \
         && docker-php-ext-enable swoole
 
-RUN     cd /tmp && curl -sSL "https://github.com/swoole/ext-postgresql/archive/v${SWOOLE_POSTGRES}.tar.gz" | tar zxvf - \
+RUN     cd /tmp && curl -sSL "https://github.com/swoole/ext-postgresql/archive/${SWOOLE_POSTGRES}.tar.gz" | tar xzf - \
         && cd ext-postgresql-${SWOOLE_POSTGRES} \
         && phpize && ./configure > /dev/null && make -j > /dev/null && make install > /dev/null \
         && docker-php-ext-enable swoole_postgresql
