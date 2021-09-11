@@ -1,6 +1,6 @@
 FROM php:8.0-cli
 
-RUN docker-php-ext-install opcache > /dev/null
+RUN docker-php-ext-install -j opcache > /dev/null
 
 RUN apt -yqq update > /dev/null && \
     apt -yqq install git unzip redis-server > /dev/null

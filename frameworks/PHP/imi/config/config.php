@@ -104,10 +104,10 @@ return [
                 'class'        =>    \Imi\Swoole\Db\Pool\CoroutineDbPool::class,
                 'config'    =>    [
                     // 池子中最多资源数
-                    'maxResources' => 512,
+                    'maxResources' => intval(1024 / swoole_cpu_num()),
                     // 池子中最少资源数
                     'minResources' => class_exists(Imi\Pgsql\Main::class) ? 0 : 16,
-                    'gcInterval'   => 3600,
+                    'gcInterval'   => 0,
                     'checkStateWhenGetResource' =>  false,
                     'requestResourceCheckInterval' => 0,
                 ],
@@ -126,10 +126,10 @@ return [
                 'class'        =>    \Imi\Swoole\Db\Pool\CoroutineDbPool::class,
                 'config'    =>    [
                     // 池子中最多资源数
-                    'maxResources' => intval(512 / swoole_cpu_num()),
+                    'maxResources' => intval(1024 / swoole_cpu_num()),
                     // 池子中最少资源数
-                    'minResources' => class_exists(Imi\Pgsql\Main::class) ? intval(512 / swoole_cpu_num()) : 0,
-                    'gcInterval'   => 3600,
+                    'minResources' => class_exists(Imi\Pgsql\Main::class) ? 16 : 0,
+                    'gcInterval'   => 0,
                     'checkStateWhenGetResource' =>  false,
                     'requestResourceCheckInterval' => 0,
                 ],
@@ -149,12 +149,12 @@ return [
                 'class'    => \Imi\Swoole\Redis\Pool\CoroutineRedisPool::class,
                 'config' => [
                     // 池子中最多资源数
-                    'maxResources' => 512,
+                    'maxResources' => intval(1024 / swoole_cpu_num()),
                     // 池子中最少资源数
                     'minResources' => getenv('WITH_REDIS') ? 16 : 0,
-                    'gcInterval'   => 3600,
+                    'gcInterval'   => 0,
                     'checkStateWhenGetResource' =>  false,
-                    'requestResourceCheckInterval' => 30,
+                    'requestResourceCheckInterval' => 0,
                 ],
             ],
             // 数组资源配置
