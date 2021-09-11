@@ -3,7 +3,7 @@ FROM php:8.0-cli
 ENV SWOOLE_VERSION 4.7.1
 ENV SWOOLE_POSTGRES f5eda17f89d160d0a89ac7c5db4636bdaefd48e6
 
-RUN docker-php-ext-install -j opcache > /dev/null
+RUN docker-php-ext-install -j$(nproc) opcache > /dev/null
 
 RUN apt -yqq update > /dev/null && \
     apt -yqq install git unzip libpq-dev redis-server > /dev/null

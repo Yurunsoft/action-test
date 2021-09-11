@@ -150,8 +150,10 @@ class IndexController extends HttpController
             $html .= "<tr><td>{$id}</td><td>{$message}</td></tr>";
         }
 
-        return $this->response->withHeader('Content-Type', 'text/html; charset=UTF-8')
-                              ->withBody(new MemoryStream("<!DOCTYPE html><html><head><title>Fortunes</title></head><body><table><tr><th>id</th><th>message</th></tr>{$html}</table></body></html>"));
+        $response = $this->response;
+        $response->setHeader('Content-Type', 'text/html; charset=UTF-8')
+                 ->setBody(new MemoryStream("<!DOCTYPE html><html><head><title>Fortunes</title></head><body><table><tr><th>id</th><th>message</th></tr>{$html}</table></body></html>"));
+        return $response;
     }
 
     /**
