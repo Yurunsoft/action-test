@@ -3,6 +3,7 @@
 use Imi\App;
 
 $mode = App::isInited() ? App::getApp()->getType() : '';
+$isMysql = ('mysql' === strtolower(getenv('TFB_TEST_DATABASE') ?: 'mysql'));
 
 return [
     // 项目根命名空间
@@ -59,7 +60,7 @@ return [
     ] : [],
 
     'db'    => [
-        'defaultPool'   => 'MySQL' === (getenv('TFB_TEST_DATABASE') ?: 'MySQL') ? 'mysql' : 'pgsql', // 默认连接池
+        'defaultPool'   => $isMysql ? 'mysql' : 'pgsql', // 默认连接池
         'connections'   => [
             'mysql' => [
                 'host'        => 'tfb-database',
@@ -106,7 +107,7 @@ return [
                     // 池子中最多资源数
                     'maxResources' => intval(1024 / swoole_cpu_num()),
                     // 池子中最少资源数
-                    'minResources' => class_exists(Imi\Pgsql\Main::class) ? 0 : 16,
+                    'minResources' => $isMysql ? 16 : 0,
                     'gcInterval'   => 0,
                     'checkStateWhenGetResource' =>  false,
                     'requestResourceCheckInterval' => 0,
@@ -128,7 +129,7 @@ return [
                     // 池子中最多资源数
                     'maxResources' => intval(1024 / swoole_cpu_num()),
                     // 池子中最少资源数
-                    'minResources' => class_exists(Imi\Pgsql\Main::class) ? 16 : 0,
+                    'minResources' => $isMysql ? 0 : 16,
                     'gcInterval'   => 0,
                     'checkStateWhenGetResource' =>  false,
                     'requestResourceCheckInterval' => 0,
