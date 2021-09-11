@@ -2,6 +2,8 @@ FROM php:8.0-cli
 
 ENV SWOOLE_VERSION 4.7.1
 ENV SWOOLE_POSTGRES f5eda17f89d160d0a89ac7c5db4636bdaefd48e6
+ARG TFB_TEST_DATABASE
+ENV TFB_TEST_DATABASE=${TFB_TEST_DATABASE}
 
 RUN docker-php-ext-install -j$(nproc) opcache > /dev/null
 
