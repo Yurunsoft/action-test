@@ -59,7 +59,7 @@ return [
     ] : [],
 
     'db'    => [
-        'defaultPool'   => 'Postgres' === getenv('TFB_TEST_DATABASE') ? 'pgsql' : 'mysql', // 默认连接池
+        'defaultPool'   => 'MySQL' === (getenv('TFB_TEST_DATABASE') ?: 'MySQL') ? 'mysql' : 'pgsql', // 默认连接池
         'connections'   => [
             'mysql' => [
                 'host'        => 'tfb-database',

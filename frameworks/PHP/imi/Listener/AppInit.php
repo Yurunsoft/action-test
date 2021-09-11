@@ -23,7 +23,7 @@ class AppInit implements IEventListener
         {
             $redis = RedisManager::getInstance();
             $page = 1;
-            while($list = Db::query('MySQL' === (getenv('TFB_TEST_DATABASE') ?: 'MySQL') ? 'mysql' : 'pgsql')->from('world')->page($page, 1000)->select()->getArray())
+            while($list = Db::query()->from('world')->page($page, 1000)->select()->getArray())
             {
                 $redisList = [];
                 foreach($list as $row)

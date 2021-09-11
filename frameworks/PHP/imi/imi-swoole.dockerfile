@@ -1,5 +1,8 @@
 FROM php:8.0-cli
 
+ARG TFB_TEST_DATABASE
+ENV TFB_TEST_DATABASE=${TFB_TEST_DATABASE}
+
 RUN docker-php-ext-install -j$(nproc) opcache > /dev/null
 
 RUN apt -yqq update > /dev/null && \
