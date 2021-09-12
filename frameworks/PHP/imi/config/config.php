@@ -4,6 +4,9 @@ use Imi\App;
 
 $mode = App::isInited() ? App::getApp()->getType() : '';
 $isMysql = ('mysql' === strtolower(getenv('TFB_TEST_DATABASE') ?: 'mysql'));
+$host = 'tfb-database';
+$username = 'benchmarkdbuser';
+$password = 'benchmarkdbpass';
 
 return [
     // 项目根命名空间
@@ -54,7 +57,7 @@ return [
             'context'   => [],
             'configs'   => [
                 // 支持设置 Workerman 参数
-                'count' => shell_exec('nproc') ?: 32,
+                'count' => (int) shell_exec('nproc') * 4,
             ],
         ],
     ] : [],
@@ -63,16 +66,16 @@ return [
         'defaultPool'   => $isMysql ? 'mysql' : 'pgsql', // 默认连接池
         'connections'   => [
             'mysql' => [
-                'host'        => 'tfb-database',
-                'username'    => 'benchmarkdbuser',
-                'password'    => 'benchmarkdbpass',
+                'host'        => $host,
+                'username'    => $username,
+                'password'    => $password,
                 'database'    => 'hello_world',
                 'dbClass'     => \Imi\Db\Mysql\Drivers\Mysqli\Driver::class,
             ],
             'pgsql' => [
-                'host'        => 'tfb-database',
-                'username'    => 'benchmarkdbuser',
-                'password'    => 'benchmarkdbpass',
+                'host'        => $host,
+                'username'    => $username,
+                'password'    => $password,
                 'database'    => 'hello_world',
                 'dbClass'     => \Imi\Pgsql\Db\Drivers\PdoPgsql\Driver::class,
             ],
@@ -115,9 +118,9 @@ return [
             ],
             // resource也可以定义多个连接
             'resource'    =>    [
-                'host'        => 'tfb-database',
-                'username'    => 'benchmarkdbuser',
-                'password'    => 'benchmarkdbpass',
+                'host'        => $host,
+                'username'    => $username,
+                'password'    => $password,
                 'database'    => 'hello_world',
                 'dbClass'     => \Imi\Swoole\Db\Driver\Swoole\Driver::class,
             ],
@@ -133,13 +136,14 @@ return [
                     'gcInterval'   => 0,
                     'checkStateWhenGetResource' =>  false,
                     'requestResourceCheckInterval' => 0,
+                    'heartbeatInterval' => 30,
                 ],
             ],
             // resource也可以定义多个连接
             'resource'    =>    [
-                'host'        => 'tfb-database',
-                'username'    => 'benchmarkdbuser',
-                'password'    => 'benchmarkdbpass',
+                'host'        => $host,
+                'username'    => $username,
+                'password'    => $password,
                 'database'    => 'hello_world',
                 'dbClass'     => \Imi\Pgsql\Db\Drivers\Swoole\Driver::class,
             ],
