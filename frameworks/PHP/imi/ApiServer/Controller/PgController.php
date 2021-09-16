@@ -2,6 +2,7 @@
 namespace ImiApp\ApiServer\Controller;
 
 use Imi\Db\Db;
+use Imi\Db\Interfaces\IDb;
 use Imi\RequestContext;
 use Imi\Redis\RedisManager;
 use ImiApp\Model\PgSql\World;
@@ -36,8 +37,8 @@ class PgController extends HttpController
     public function pgDbRaw(): array
     {
         $db = Db::getInstance(self::POOL_NAME);
-        $stmt = $db->prepare('SELECT id, randomnumber FROM World WHERE id = :id LIMIT 1');
-        $stmt->execute([':id' => \mt_rand(1, 10000)]);
+        $stmt = $db->prepare('SELECT id, randomnumber FROM World WHERE id = ? LIMIT 1');
+        $stmt->execute([\mt_rand(1, 10000)]);
         return $stmt->fetch();
     }
 
@@ -81,10 +82,10 @@ class PgController extends HttpController
         }
         $list = [];
         $db = Db::getInstance(self::POOL_NAME);
-        $stmt = $db->prepare('SELECT id, randomnumber FROM World WHERE id = :id LIMIT 1');
+        $stmt = $db->prepare('SELECT id, randomnumber FROM World WHERE id = ? LIMIT 1');
         while ($queryCount--)
         {
-            $stmt->execute([':id' => \mt_rand(1, 10000)]);
+            $stmt->execute([\mt_rand(1, 10000)]);
             $list[] = $stmt->fetch();
         }
         return $list;
@@ -178,19 +179,32 @@ class PgController extends HttpController
         {
             $queryCount = 1;
         }
-        $list = [];
         $db = Db::getInstance(self::POOL_NAME);
-        $stmtSelect = $db->prepare('SELECT id, randomnumber FROM World WHERE id = :id LIMIT 1');
-        $stmtUpdate = $db->prepare('UPDATE World SET randomnumber = :randomnumber WHERE id = :id');
+        $stmtSelect = $db->prepare('SELECT id, randomnumber FROM World WHERE id = ? LIMIT 1');
+        $stmtUpdate = $db->prepare('UPDATE World SET randomNumber = CASE id' . \str_repeat(' WHEN ?::INTEGER THEN ?::INTEGER ', $queryCount) . 'END WHERE id IN (' . \str_repeat('?::INTEGER,', $queryCount - 1) . '?::INTEGER)');
+        $list = [];
+        $keys = $values = [];
         while ($queryCount--)
         {
-            $id = \mt_rand(1, 10000);
-            $stmtSelect->execute([':id' => $id]);
+            $values[] = $keys[] = $id = \mt_rand(1, 10000);
+            $stmtSelect->execute([$id]);
             $row = $stmtSelect->fetch();
-            $row['randomnumber'] = $randomNumber = \mt_rand(1, 10000);
-            $stmtUpdate->execute([':randomnumber' => $randomNumber, ':id' => $id]);
+
+            $values[] = $row['randomNumber'] = \mt_rand(1, 10000);
             $list[] = $row;
         }
+        $db->beginTransaction();
+        try {
+            $stmtUpdate->execute([
+                ...$values,
+                ...$keys
+            ]);
+            $db->commit();
+        } catch(\Throwable $th) {
+            $db->rollBack();
+            throw $th;
+        }
+
         return $list;
     }
 }

@@ -1,6 +1,7 @@
 {
     "require": {
-        "imiphp/imi": "2.0.x-dev"
+        "imiphp/imi": "~2.0",
+        "imiphp/imi-pgsql": "~2.0"
     },
     "autoload": {
         "psr-4" : {

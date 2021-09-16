@@ -1,18 +1,20 @@
 <?php
 namespace ImiApp\ApiServer\Controller;
 
+use Imi\App;
 use Imi\Db\Db;
 use Imi\RequestContext;
 use ImiApp\Model\World;
 use ImiApp\Model\Fortune;
+use Imi\Db\Interfaces\IDb;
 use Imi\Redis\RedisManager;
 use Imi\Util\Stream\MemoryStream;
 use Imi\Server\View\Annotation\View;
 use Imi\Server\Http\Route\Annotation\Route;
 use Imi\Server\Http\Route\Annotation\Action;
 use Imi\Server\Http\Controller\HttpController;
-use Imi\Server\Http\Message\Contract\IHttpResponse;
 use Imi\Server\Http\Route\Annotation\Controller;
+use Imi\Server\Http\Message\Contract\IHttpResponse;
 
 /**
  * @Controller("/")
@@ -207,6 +209,7 @@ class IndexController extends HttpController
             $stmtUpdate->execute([$randomNumber, $id]);
             $list[] = $row;
         }
+
         return $list;
     }
 
@@ -225,12 +228,20 @@ class IndexController extends HttpController
         {
             $queryCount = 1;
         }
-        $ids = [];
-        while ($queryCount--)
+
+        $list = App::get('worlds');
+        $result = [];
+        $keys = array_rand($list, $queryCount);
+        foreach ((array) $keys as $key)
         {
-            $ids[] = 'world:' . \mt_rand(1, 10000);
+            if (!isset($list[$key]))
+            {
+                break;
+            }
+            $result[] = $list[$key];
         }
-        return RedisManager::getInstance()->mget($ids);
+
+        return $result;
     }
 
 }

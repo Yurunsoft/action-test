@@ -17,11 +17,6 @@ return [
         'beans'        =>    __DIR__ . '/beans.php',
     ],
 
-    // 扫描目录
-    'beanScan'    =>    [
-        'ImiApp\Listener',
-    ],
-
     // 组件命名空间
     'components'    =>  [],
 
@@ -82,25 +77,6 @@ return [
         ],
     ],
 
-    // redis 配置
-    'redis' => [
-        // 默认连接池名
-        'defaultPool'   => 'redis',
-        'quickFromRequestContext'   =>    true, // 从当前上下文中获取公用连接
-        'connections'   => [
-            'redis' => [
-                'host'      =>  '127.0.0.1',
-                'port'      =>  6379,
-                // 是否自动序列化变量
-                'serialize' =>  true,
-                // 密码
-                'password'  =>  null,
-                // 第几个库
-                'db'        =>  0,
-            ],
-        ],
-    ],
-
     'pools' => 'swoole' === $mode ? [
         // 连接池名称
         'mysql' => [
@@ -133,10 +109,8 @@ return [
                     'maxResources' => intval(1024 / swoole_cpu_num()),
                     // 池子中最少资源数
                     'minResources' => $isMysql ? 0 : 16,
-                    'gcInterval'   => 0,
                     'checkStateWhenGetResource' =>  false,
                     'requestResourceCheckInterval' => 0,
-                    'heartbeatInterval' => 30,
                 ],
             ],
             // resource也可以定义多个连接
@@ -146,32 +120,6 @@ return [
                 'password'    => $password,
                 'database'    => 'hello_world',
                 'dbClass'     => \Imi\Pgsql\Db\Drivers\Swoole\Driver::class,
-            ],
-        ],
-        'redis' =>  [
-            'pool' => [
-                // 协程池类名
-                'class'    => \Imi\Swoole\Redis\Pool\CoroutineRedisPool::class,
-                'config' => [
-                    // 池子中最多资源数
-                    'maxResources' => intval(1024 / swoole_cpu_num()),
-                    // 池子中最少资源数
-                    'minResources' => getenv('WITH_REDIS') ? 16 : 0,
-                    'gcInterval'   => 0,
-                    'checkStateWhenGetResource' =>  false,
-                    'requestResourceCheckInterval' => 0,
-                ],
-            ],
-            // 数组资源配置
-            'resource' => [
-                'host'      =>  '127.0.0.1',
-                'port'      =>  6379,
-                // 是否自动序列化变量
-                'serialize' =>  true,
-                // 密码
-                'password'  =>  null,
-                // 第几个库
-                'db'        =>  0,
             ],
         ],
     ] : [],
