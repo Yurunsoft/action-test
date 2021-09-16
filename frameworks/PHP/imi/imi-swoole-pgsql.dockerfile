@@ -1,7 +1,7 @@
 FROM php:8.0-cli
 
 ENV SWOOLE_VERSION 4.7.1
-ENV SWOOLE_POSTGRES f5eda17f89d160d0a89ac7c5db4636bdaefd48e6
+ENV SWOOLE_POSTGRES 32c1281e892925fd5b2b7dac7070c40dfb54e729
 ARG TFB_TEST_DATABASE
 ENV TFB_TEST_DATABASE=${TFB_TEST_DATABASE}
 
@@ -15,7 +15,7 @@ RUN     cd /tmp && curl -sSL "https://github.com/swoole/swoole-src/archive/v${SW
         && phpize && ./configure > /dev/null && make -j > /dev/null && make install > /dev/null \
         && docker-php-ext-enable swoole
 
-RUN     cd /tmp && curl -sSL "https://github.com/swoole/ext-postgresql/archive/${SWOOLE_POSTGRES}.tar.gz" | tar xzf - \
+RUN     cd /tmp && curl -sSL "https://github.com/Yurunsoft/ext-postgresql/archive/${SWOOLE_POSTGRES}.tar.gz" | tar xzf - \
         && cd ext-postgresql-${SWOOLE_POSTGRES} \
         && phpize && ./configure > /dev/null && make -j > /dev/null && make install > /dev/null \
         && docker-php-ext-enable swoole_postgresql
