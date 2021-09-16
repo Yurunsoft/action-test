@@ -34,8 +34,8 @@ WORKDIR /imi
 
 RUN curl -sSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-dev --classmap-authoritative --quiet > /dev/null
-RUN composer require imiphp/imi-swoole:~2.0.0 -W
-RUN composer require imiphp/imi-pgsql:~2.0.0 -W
+RUN composer require imiphp/imi-swoole:2.0.x-dev -W
+RUN composer require imiphp/imi-pgsql:2.0.x-dev -W
 RUN composer dumpautoload -o
 
 EXPOSE 8080
